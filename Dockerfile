@@ -1,12 +1,11 @@
-# Using a compact OS
-FROM daocloud.io/nginx:1.11-alpine
+FROM node:8.0.0
 
-MAINTAINER Golfen Guo <golfen.guo@daocloud.io>
-
-# Add 2048 stuff into Nginx server
-COPY . /usr/share/nginx/html
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
+COPY package.json /usr/src/app
+RUN npm install
+COPY . /usr/src/app
 
 EXPOSE 80
 
-# Start Nginx and keep it running background and start php
-CMD sed -i "s/ContainerID: /ContainerID: "$(hostname)"/g" /index.html && nginx -g "daemon off;"
+ENTRYPOINT ["node","server.js"]
